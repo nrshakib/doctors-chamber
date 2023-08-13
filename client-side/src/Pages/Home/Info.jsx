@@ -6,7 +6,7 @@ import phone from "../../../Resources/assets/icons/phone.svg";
 
 const Info = (img) => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 px-12">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
       <InfoCard
         cardTitle="Opening Hours"
         img={clock}
