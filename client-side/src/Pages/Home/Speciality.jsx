@@ -19,7 +19,7 @@ const Speciality = () => {
           dolor voluptatibus!
         </p>
         <div p-0>
-          <PrimaryButton />
+          <PrimaryButton>Explore</PrimaryButton>
         </div>
       </div>
     </div>
