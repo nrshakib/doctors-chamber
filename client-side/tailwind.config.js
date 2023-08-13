@@ -16,7 +16,7 @@ export default {
           "base-100": "#ffffff",
         },
       },
-      "dark",
+      // "dark",
       "cupcake",
     ],
   },
