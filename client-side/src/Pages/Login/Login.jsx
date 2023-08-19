@@ -1,21 +1,42 @@
 import React from "react";
-import { useSignInWithGoogle } from "react-firebase-hooks/auth";
+import {
+  useSignInWithEmailAndPassword,
+  useSignInWithGoogle,
+} from "react-firebase-hooks/auth";
 import auth from "../../firebase.init";
 import { useForm } from "react-hook-form";
+import Loading from "../Shared/Loading";
 
 const Login = () => {
-  const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+  const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
+  const [signInWithEmailAndPassword, user, loading, error] =
+    useSignInWithEmailAndPassword(auth);
+
+  let signInError;
+
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
 
-  if (user) {
-    console.log(user);
+  if (loading || gLoading) {
+    return <Loading />;
+  }
+  if (error || gError) {
+    signInError = (
+      <p className="text-red-500">
+        <small>{error?.message || gError?.message}</small>{" "}
+      </p>
+    );
+  }
+
+  if (gUser) {
+    console.log(gUser);
   }
   const onSubmit = (data) => {
     console.log(data);
+    signInWithEmailAndPassword(data.email, data.password);
   };
 
   return (
@@ -34,6 +55,7 @@ const Login = () => {
                 type="email"
                 placeholder="Enter Your Email Address"
                 className="input input-bordered w-full max-w-xs"
+                autoComplete="off"
                 {...register("email", {
                   required: {
                     value: true,
@@ -93,7 +115,7 @@ const Login = () => {
                 )}
               </label>
             </div>
-
+            {signInError}
             <input
               className="btn bg-gradient-to-r from-secondary to-primary text-white w-full max-w-xs"
               type="submit"
