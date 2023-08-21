@@ -7,6 +7,7 @@ import auth from "../../firebase.init";
 import { useForm } from "react-hook-form";
 import Loading from "../Shared/Loading";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { sendPasswordResetEmail } from "firebase/auth";
 
 const Login = () => {
   const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
@@ -45,6 +46,12 @@ const Login = () => {
   const onSubmit = (data) => {
     console.log(data);
     signInWithEmailAndPassword(data.email, data.password);
+  };
+
+  const handlePasswordReset = ({user}) => {
+    sendPasswordResetEmail(auth, user.email).then(() => {
+      console.log("Reset email sent");
+    });
   };
 
   return (
@@ -124,6 +131,13 @@ const Login = () => {
               </label>
             </div>
             {signInError}
+            <button
+              onClick={handlePasswordReset}
+              className="ml-12 btn btn-link text-center font-normal"
+            >
+              Forgot Password ? Reset
+            </button>
+
             <input
               className="btn bg-gradient-to-r from-secondary to-primary text-white w-full max-w-xs"
               type="submit"
