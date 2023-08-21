@@ -6,6 +6,7 @@ import {
 } from "react-firebase-hooks/auth";
 import auth from "../../firebase.init";
 import { useForm } from "react-hook-form";
+import { getAuth, sendEmailVerification } from "firebase/auth";
 import Loading from "../Shared/Loading";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -36,14 +37,22 @@ const SignUp = () => {
     );
   }
 
-  if (gUser) {
-    console.log(gUser);
+  if (user) {
+    console.log(user);
   }
   const onSubmit = async (data) => {
     await createUserWithEmailAndPassword(data.email, data.password);
     await updateProfile({ displayName: data.name });
     console.log("updated profile");
+    verifyEmail();
     navigate("/appointment");
+  };
+
+  const verifyEmail = () => {
+    const auth = getAuth();
+    sendEmailVerification(auth.currentUser).then(() => {
+      console.log("email verify sent");
+    });
   };
 
   return (
