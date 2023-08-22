@@ -44,8 +44,18 @@ async function run() {
         date: booking.date,
         patientMail: booking.patientMail,
       };
+      const exists = await bookingCollection.findOne(query);
+      if (exists) {
+        return res.send({
+          success: false,
+          booking: exists,
+        });
+      }
       const result = bookingCollection.insertOne(booking);
-      res.send(result);
+      res.send({
+        success: true,
+        result,
+      });
     });
   } finally {
     // Ensures that the client will close when you finish/error
