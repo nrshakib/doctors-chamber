@@ -20,15 +20,32 @@ async function run() {
   try {
     // Connect the client to the server
     await client.connect();
+
+    //create collections in db
     const serviceCollection = client
       .db("doctors_portal_db")
       .collection("services");
+    const bookingCollection = client
+      .db("doctors_portal_db")
+      .collection("bookings");
+
     // console.log("You successfully connected to MongoDB!");
     app.get("/services", async (req, res) => {
       const query = {};
       const cursor = serviceCollection.find(query);
       const services = await cursor.toArray();
       res.send(services);
+    });
+
+    app.post("/booking", async (req, res) => {
+      const booking = req.body;
+      const query = {
+        treatment: booking.treatment,
+        date: booking.date,
+        patientMail: booking.patientMail,
+      };
+      const result = bookingCollection.insertOne(booking);
+      res.send(result);
     });
   } finally {
     // Ensures that the client will close when you finish/error
